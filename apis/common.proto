@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "com.yunli.bigdata.eventbus.apis.common";
+option go_package = "code.aliyun.com/yunli-bigdata/base/event-bus/apis";
+
+message Event {
+    string topic = 1;
+    // 如果Key没有指定，round-roubin。
+    string partitionKey = 2;
+    bytes data = 3;
+}

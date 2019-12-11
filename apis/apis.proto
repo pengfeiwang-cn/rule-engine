@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+package apis;
+
+option java_package = "com.yunli.bigdata.runengine.apis";
+option go_package = "code.aliyun.com/yunli-bigdata/base/run-engine/controlplane/engine/apis";
+
+service Engine {
+    rpc CreateEnvironment (CreateEnvironmentRequest) returns (CreateEnvironmentResponse);
+    rpc UploadEnvironment (stream UploadRequest) returns (UploadResponse);
+    rpc DropEnvironment (DropEnvironmentRequest) returns (DropEnvironmentResponse);
+    rpc GetEnvironments (GetEnvironmentsRequest) returns (stream Environment);
+    rpc GetEnvironment (GetEnvironmentRequest) returns (Environment);
+    rpc CreateRuntime (CreateRuntimeRequest) returns (CreateRuntimeResponse);
+    rpc UploadRuntime (stream UploadRequest) returns (UploadResponse);
+    rpc DropRuntime (DropRuntimeRequest) returns (DropRuntimeResponse);
+    rpc GetRuntimes (GetRuntimesRequest) returns (stream Runtime);
+    rpc GetRuntime (GetRuntimeRequest) returns (Runtime);
+
+    rpc DownloadEnvironment (ID) returns (stream Binary);
+    rpc DownloadRuntime (ID) returns (stream Binary);
+
+    rpc UpdateEnvironment (UpdateEnvironmentRequest) returns (UpdateEnvironmentResponse);
+    rpc UpdateRuntime (UpdateRuntimeRequest) returns (UpdateRuntimeResponse);
+}
+
+message GetEnvironmentsRequest {
+}
+
+message GetEnvironmentRequest {
+    oneof parameter {
+        int64 id = 1;
+        string name = 2;
+    }
+}
+
+message Environment {
+    int64 id = 1;
+    string name = 2;
+    int64 createdAt = 3;
+    int64 updatedAt = 4;
+    string comments = 5;
+    string creator = 6;
+}
+
+message UpdateEnvironmentRequest {
+    int64 id = 1;
+    string name = 2;
+    string comments = 3;
+    string creator = 4;
+}
+
+message UpdateEnvironmentResponse {}
+
+message Runtime {
+    int64 id = 1;
+    string name = 2;
+    Command command = 3;
+    int64 createdAt = 4;
+    int64 updatedAt = 5;
+    string comments = 6;
+    string creator = 7;
+    int64 environmentId = 8;
+}
+
+message UpdateRuntimeRequest {
+    int64 id = 1;
+    string name = 2;
+    Command command = 3;
+    string comments = 4;
+    string creator = 5;
+    int64 environmentId = 6;
+}
+
+message UpdateRuntimeResponse {}
+
+message Command {
+    string executable = 1;
+    repeated string args = 2;
+    repeated string env = 3;
+}
+
+message GetRuntimesRequest {
+    oneof parameter {
+        int64 environmentId = 1;
+        string environmentName = 2;
+    }
+}
+
+message GetRuntimeRequest {
+    oneof parameter {
+        int64 id = 1;
+        string name = 2;
+    }
+}
+
+message CreateEnvironmentRequest {
+    string name = 1;
+    string comments = 2;
+    string creator = 3;
+}
+
+message CreateEnvironmentResponse {
+    int64 id = 1;
+}
+
+message UploadRequest {
+    int64 id = 1;
+    bytes bytes = 2;
+}
+
+message ID {
+    int64 id = 1;
+}
+
+message Binary {
+    bytes bytes = 1;
+}
+
+message UploadResponse {
+}
+
+message CreateRuntimeRequest {
+    string name = 1;
+    Command command = 2;
+    string comments = 3;
+    string creator = 4;
+    int64 environmentId = 5;
+}
+
+message CreateRuntimeResponse {
+    int64 id = 1;
+}
+
+message DropEnvironmentRequest {
+    int64 id = 1;
+}
+
+message DropEnvironmentResponse {
+}
+
+message DropRuntimeRequest {
+    int64 id = 1;
+}
+
+message DropRuntimeResponse {
+}
